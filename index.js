@@ -7,19 +7,30 @@ var bodyParser =require('body-parser');
 
 var app = express();
 var db = mysql.connection;
-db.once("open",function(){
-  console.log("DB connected");
-});
-db.on("error",function(err){
-  console.log("DB ERROR: ",err);
-});
+// db.once("open",function(){
+//   console.log("DB connected");
+// });
+// db.on("error",function(err){
+//   console.log("DB ERROR: ",err);
+// });
 
 //model setting
-var poastSchema = mysql.Schema({
-  id : {type:Integer , required:true},
-  name : {type:String, required:true},
-  age: {type:Integer, required:true}
-});
+
+//mondb expressing
+// var postSchema = mysql.Schema({
+//   id : {type:integer , required:true},
+//   name : {type:String, required:true},
+//   age: {type:integer, required:true}
+// });
+app.post('test',function(req,res){
+  var id = req.body.id,
+  name = req.body.name,
+  age = req.body.age;
+
+  console.log(id);
+  console.log(name);
+  console.log(age);
+})
 
 //view setting
 app.set("view engine",'ejs');
