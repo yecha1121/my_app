@@ -36,20 +36,21 @@ app.get('/persons',function(req,res){
   });
 });
 
-app.post('/persons',function(req,res){
-  let id = req.body.id;
-  let name = req.body.name;
-  let age = req.body.age;
+//post방식으로 전달되는 파라미터 처리를 위해 필요
+app.use(bodyParser.urlencoded({extended: true}));
 
-  var sql ='Insert into Persons values(?,?,?)';
-  var params = [id, name, age];
-  conn.query(sql,params, function(err,result,fields){
+app.post('/insert',function(req,res){
+  let body = req.body;
+
+  var sql ='Insert into Persons(id, name, age) values(?,?,?)';
+  var params = [body.id, body.name, body.age];
+  conn.query(sql,params, function(err,rows){
       if(err){
         console.log(err);
         res.status(500).send('Internal Server Error');
       }
       console.log('The file has saved');
-      res.redirect('/persons'+result.insertId);
+      res.redirect('/')
   });
 });
 
