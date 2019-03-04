@@ -1,27 +1,12 @@
 var express = require('express');
+var app = express();
+var path = require('path');
 var mysql = require('mysql');
 var dbconfig = require('./config/database.js');
 var connection = mysql.createConnection(dbconfig);
-var path = require('path');
 var bodyParser =require('body-parser');
-
-var app = express();
 var db = mysql.connection;
-// db.once("open",function(){
-//   console.log("DB connected");
-// });
-// db.on("error",function(err){
-//   console.log("DB ERROR: ",err);
-// });
 
-//model setting
-
-//mondb expressing
-// var postSchema = mysql.Schema({
-//   id : {type:integer , required:true},
-//   name : {type:String, required:true},
-//   age: {type:integer, required:true}
-// });
 app.post('test',function(req,res){
   var id = req.body.id,
   name = req.body.name,
@@ -34,35 +19,37 @@ app.post('test',function(req,res){
 
 //view setting
 app.set("view engine",'ejs');
+
+//set middlewares
 app.use(express.static(path.join(__dirname + 'public')));
 app.use(bodyParser.json());
 
 app.set('port', process.env.PORT || 8000);
 
-// app.get('/',function(req,res){
-//   res.send('Root');
-// });
-
 //set routes
-app.get('/posts',function(req, res){
-  Post.find({},function(err,posts){
-    if(err)return res.json({success:false,message:err});
-    res.json({success:true,data:posts});
-  });
-});
-app.post('/posts',function(req,res){
-  Post.crate(req.body.post,function(err,post){
-    if(err)return res.json({success:false,message:err});
-    res.json({success:true,data:posts});
-  });
-});
-
 app.get('/persons',function(req,res){
   connection.query('Select * from Persons',function(err, rows){
     if(err) throw err;
 
     console.log('the solution is: ',rows);
     res.send(rows);
+  });
+});
+
+app.post('/persons',function(req,res){
+  let id = req.body.id;
+  let name = req.body.name;
+  let age = req.body.age;
+
+  var sql ='Insert into Persons values(?,?,?)';
+  var params = [id, name, age];
+  conn.query(sql,params, function(err,result,fields){
+      if(err){
+        console.log(err);
+        res.status(500).send('Internal Server Error');
+      }
+      console.log('The file has saved');
+      res.redirect('/persons'+result.insertId);
   });
 });
 

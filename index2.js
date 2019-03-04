@@ -18,3 +18,19 @@
 // });
 //
 // connection.end();
+
+
+//set routes
+// app.get('/posts',function(req, res){
+//   Post.find({},function(err,posts){
+//     if(err)return res.json({success:false,message:err});
+//     res.json({success:true,data:posts});
+//   });
+// });
+//
+// app.post('/posts',function(req,res){
+//   Post.crate(req.body.post,function(err,post){
+//     if(err)return res.json({success:false,message:err});
+//     res.json({success:true,data:posts});
+//   });
+// });
